@@ -13,7 +13,19 @@ router.post('/sign-up', async (req, res) => {
       password: bcrypt.hashSync(req.body.password, 10)
     })
 
-    res.status(201).json({ message: 'User created successfully' })
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET
+    )
+
+    res.status(201).json({
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    })
   } catch (error) {
     res.status(500).json(error)
   }
@@ -38,7 +50,14 @@ router.post('/sign-in', async (req, res) => {
       process.env.JWT_SECRET
     )
 
-    res.json({ token })
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    })
   } catch (error) {
     res.status(500).json(error)
   }

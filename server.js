@@ -7,6 +7,7 @@ const morgan = require('morgan')
 
 const authRoutes = require('./routes/auth')
 const bookRoutes = require('./routes/books')
+const categoryRoutes = require('./routes/categories')
 
 const app = express()
 
@@ -16,15 +17,20 @@ app.use(morgan('dev'))
 
 app.use('/auth', authRoutes)
 app.use('/books', bookRoutes)
+app.use('/categories', categoryRoutes)
 
 mongoose.connect(process.env.MONGODB_URI)
-
-mongoose.connection.on('connected', () => {
-  console.log('Connected to MongoDB')
-})
+  .then(() => {
+    console.log('Connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('MongoDB connection error:', error.message)
+  })
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Book Notes API Running' })
+  res.json({
+    message: 'Book Notes API Running'
+  })
 })
 
 app.listen(3000, () => {

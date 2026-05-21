@@ -19,6 +19,10 @@ const bookSchema = new mongoose.Schema(
     rating: {
       type: Number
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category'
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
